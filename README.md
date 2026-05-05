@@ -132,6 +132,7 @@ This public README documents an architecture pattern, not a turnkey product.
 
 Notable limitations carried over from the original implementation design:
 
+- some orchestration modules are included as illustrative control-flow examples and are intentionally not wired for standalone execution in this public artifact
 - downstream delivery was implemented for one messaging path, while other fallback channels were only planned
 - some policy and compliance hardening steps were documented but not fully enforced in code
 - call-quality and production-evaluation workflows were outside the scope of the public artifact
