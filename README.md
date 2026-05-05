@@ -2,12 +2,23 @@
 
 ⚠️ This is a sanitized version of a production project originally built in a private environment.
 
+## Legal Disclaimer
+
+**THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.**
+
 This repository is published as a reference artifact, not as a turnkey application. It is intentionally incomplete in places, with private configuration, internal prompts, and environment-specific wiring removed. The goal is to show architecture, control flow, and integration patterns without implying that a fresh clone should run unchanged.
+
 
 ## What it demonstrates
 - AI agent architecture
 - Tool calling
 - Workflow orchestration
+
+## ⚠️ Important Considerations
+
+- **Costs**: Running this project involves third-party services (Telnyx, AI providers) that incur costs. You are solely responsible for all charges incurred.
+- **Production Readiness**: This is a reference architecture. It is not hardened for production use. You should perform your own security, load testing, and cost analysis before any deployment.
+- **Privacy**: Ensure you comply with all local regulations regarding recording and processing voice data.
 
 ## What is removed
 - Proprietary integrations
