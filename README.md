@@ -80,7 +80,41 @@ The project leverages **LangGraph** to manage the lifecycle of a voice call and 
 - **Modularity**: Logic for "dispatching a lead" or "requesting a follow-up" is isolated into discrete, testable nodes.
 
 ## Implemented Workflow
-... (omitted for brevity) ...
+
+The private implementation behind this sanitized version included the following workflow patterns:
+
+1. Receive inbound call events from a telephony provider.
+2. Answer the call programmatically.
+3. Start bidirectional audio streaming to the backend.
+4. Forward inbound audio frames into a realtime AI session.
+5. Keep the conversation short and task-focused.
+6. Trigger a tool/function call once the task description is clear enough.
+7. Send the extracted lead or task summary to a messaging destination.
+8. End the call and clean up session state.
+
+This design demonstrates how voice intake, AI reasoning, and external delivery can be composed into a single event-driven workflow.
+
+## Agent Responsibilities
+
+The project was organized around several logical agent roles:
+
+- Voice intake agent: handles inbound call events, answers calls, and starts streaming.
+- Speech understanding layer: processes live audio inside the realtime AI session.
+- Structuring agent: gathers the caller's intent and emits a structured tool call.
+- Routing agent: sends the structured result to a downstream channel.
+- Control-flow agent: manages interruption, silence handling, audio flushing, and call shutdown.
+
+These roles are useful as an architecture pattern even when the underlying providers or downstream systems change.
+
+## Technical Patterns Demonstrated
+
+- Webhook-driven backend orchestration
+- Realtime WebSocket-to-WebSocket bridging
+- Voice turn-taking with speech boundary events
+- Tool calling for structured data extraction
+- Session lifecycle management for live calls
+- Notification routing after successful extraction
+- Operational metrics collection and scheduled summaries
 
 ## Repository Shape
 
