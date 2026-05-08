@@ -57,61 +57,44 @@ Inbound call
 Core architecture characteristics:
 
 - Python FastAPI backend for HTTP webhook handling and WebSocket orchestration
+- **LangGraph-driven Orchestration**: Complex decision-making and flow control are managed using stateful graphs, allowing for modular and testable agent logic.
 - Realtime AI session for live speech understanding and response generation
 - Tool-calling step to convert conversation state into a structured payload
 - Session-state tracking for active calls
 - SQLite-backed metrics and summary bookkeeping
 - Long-running service deployment model suitable for persistent WebSocket workloads
 
+## Orchestration with LangGraph
+
+The project leverages **LangGraph** to manage the lifecycle of a voice call and the extraction of structured data. By using a directed graph for orchestration, the system can handle complex state transitions and conditional logic more reliably than a linear script.
+
+### Key Graphs
+
+- **Submit Lead Graph**: Orchestrates the process of validating a task description, dispatching it to downstream services (like Telegram), and handling follow-up interactions if the information is incomplete.
+- **Call Decision Graph**: Periodically evaluates the call state (silence, user activity, task completion) to decide whether to continue the conversation or terminate the call.
+
+### Benefits
+
+- **Stateful Persistence**: Maintains the context of the call across multiple turns and tool calls.
+- **Traceability**: Every node transition and routing decision is instrumented, providing deep visibility into the agent's reasoning process.
+- **Modularity**: Logic for "dispatching a lead" or "requesting a follow-up" is isolated into discrete, testable nodes.
+
 ## Implemented Workflow
-
-The private implementation behind this sanitized version included the following workflow patterns:
-
-1. Receive inbound call events from a telephony provider.
-2. Answer the call programmatically.
-3. Start bidirectional audio streaming to the backend.
-4. Forward inbound audio frames into a realtime AI session.
-5. Keep the conversation short and task-focused.
-6. Trigger a tool/function call once the task description is clear enough.
-7. Send the extracted lead or task summary to a messaging destination.
-8. End the call and clean up session state.
-
-This design demonstrates how voice intake, AI reasoning, and external delivery can be composed into a single event-driven workflow.
-
-## Agent Responsibilities
-
-The project was organized around several logical agent roles:
-
-- Voice intake agent: handles inbound call events, answers calls, and starts streaming.
-- Speech understanding layer: processes live audio inside the realtime AI session.
-- Structuring agent: gathers the caller's intent and emits a structured tool call.
-- Routing agent: sends the structured result to a downstream channel.
-- Control-flow agent: manages interruption, silence handling, audio flushing, and call shutdown.
-
-These roles are useful as an architecture pattern even when the underlying providers or downstream systems change.
-
-## Technical Patterns Demonstrated
-
-- Webhook-driven backend orchestration
-- Realtime WebSocket-to-WebSocket bridging
-- Voice turn-taking with speech boundary events
-- Tool calling for structured data extraction
-- Session lifecycle management for live calls
-- Notification routing after successful extraction
-- Operational metrics collection and scheduled summaries
+... (omitted for brevity) ...
 
 ## Repository Shape
 
-The original codebase was structured roughly like this:
+The codebase is structured to separate concern between API handling, core services, and agent orchestration:
 
 ```text
 app/
-  agent/      # prompt, extraction, decision, state
-  api/        # webhook endpoints
-  core/       # config, logging, session management
-  services/   # provider and summary integrations
-  ws/         # live media streaming orchestration
-scripts/      # deployment helpers
+  agent/          # Prompt templates and extraction logic
+  api/            # FastAPI webhook and websocket endpoints
+  core/           # Configuration, logging, and session state
+  services/       # External integrations (Telnyx, Telegram, DB)
+  ws/             # Realtime media streaming orchestration
+orchestration/    # LangGraph definitions (nodes, state, and graphs)
+scripts/          # Deployment and maintenance helpers
 ```
 
 This separation keeps the live orchestration path readable while isolating provider-specific actions and shared application state.
